@@ -22,11 +22,7 @@
     "@azbake/core": "~0"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@azbake/core": "file:../../core",
-=======
-    "@azbake/core": "^0.1.15",
->>>>>>> 48d0b90951ff3717a42e25222969284b9a6ec993
     "typescript": "^3.2.2"
   },
   "publishConfig": {
