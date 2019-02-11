@@ -25,6 +25,7 @@
     "@types/node": "^10.12.18"
   },
   "dependencies": {
+    "@azbake/core": "^0.1.15",
     "typescript": "^3.2.2"
   },
   "publishConfig": {
