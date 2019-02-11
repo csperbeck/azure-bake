@@ -23,7 +23,11 @@
     "@azure/ms-rest-nodeauth": ">= 0.8.3"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@azbake/core": "file:../../core",
+=======
+    "@azbake/core": "^0.1.15",
+>>>>>>> 48d0b90951ff3717a42e25222969284b9a6ec993
     "@azure/arm-resources": "^1.0.0",
     "@azure/ms-rest-nodeauth": "^0.9.1"
   },
