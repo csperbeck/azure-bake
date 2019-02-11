@@ -21,10 +21,8 @@
   "peerDependencies": {
     "@azbake/core": "~0"
   },
-  "devDependencies": {
-    "@types/node": "^10.12.18"
-  },
   "dependencies": {
+    "@azbake/core": "file:../../core",
     "typescript": "^3.2.2"
   },
   "publishConfig": {

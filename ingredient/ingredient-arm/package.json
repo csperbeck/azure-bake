@@ -22,11 +22,10 @@
     "@azbake/core": "~0",
     "@azure/ms-rest-nodeauth": ">= 0.8.3"
   },
-  "devDependencies": {
-    "@types/node": "^10.12.18"
-  },
   "dependencies": {
-    "@azure/arm-resources": "^1.0.0"
+    "@azbake/core": "file:../../core",
+    "@azure/arm-resources": "^1.0.0",
+    "@azure/ms-rest-nodeauth": "^0.9.1"
   },
   "publishConfig": {
     "access": "public"

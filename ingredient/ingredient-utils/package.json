@@ -21,10 +21,10 @@
   "peerDependencies": {
     "@azbake/core": "~0"
   },
-  "devDependencies": {
-    "@types/node": "^10.12.18"
-  },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@azbake/core": "file:../../core"
   }
 }

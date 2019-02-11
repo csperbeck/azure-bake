@@ -1,4 +1,4 @@
-import { IBakePackage, IBakeRegion, IIngredient, IBakeAuthentication, BakeEval, IBakeConfig, IngredientManager } from "@azbake/core";
+import { IBakePackage, IBakeRegion, IIngredient, IBakeAuthentication, BakeEval, IBakeConfig, IngredientManager, BakeVariable } from "@azbake/core";
 import { IngredientFactory } from './ingredients'
 import { red, cyan } from 'colors'
 import { DeploymentContext, Logger } from "@azbake/core"
@@ -86,7 +86,7 @@ export class BakeRunner {
 
             let rg_name = util.resource_group()
             let region_name = ctx.Region.shortName
-
+            let allowed_types = (ctx.Environment.variables.get("resource_types") || <BakeVariable>{}).Code.split(",")
             let client = new ResourceManagementClient(ctx.AuthToken, ctx.Environment.authentication.subscriptionId)
 
             let rgExists = false
@@ -118,7 +118,7 @@ export class BakeRunner {
             let loopHasRemaining: boolean = true
             while (loopHasRemaining) {
                 try {
-                    loopHasRemaining = await this._executeBakeLoop(ingredientNames, finished, ctx)
+                    loopHasRemaining = await this._executeBakeLoop(ingredientNames, finished, ctx, allowed_types)
                 }
                 catch{
                     throw new Error()
