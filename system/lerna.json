@@ -8,5 +8,5 @@
         "message": "chore(release): publish"
       }
     },
-    "packages": ["../ingredient/*","../core", "./"]
+    "packages": ["../ingredient/*","../core", "./", "../arm-helper"]
   }
