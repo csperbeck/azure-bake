@@ -1,0 +1,40 @@
+0 silly argv { _: [ 'clean' ],
+0 silly argv   yes: true,
+0 silly argv   y: true,
+0 silly argv   lernaVersion: '3.11.1',
+0 silly argv   '$0':
+0 silly argv    '..\\..\\..\\..\\..\\AppData\\Roaming\\npm\\node_modules\\lerna\\cli.js' }
+1 notice cli v3.11.1
+2 verbose rootPath C:\Users\csperbeck\source\repos\azure-bake
+3 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\arm-helper\node_modules
+4 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\arm-helper\node_modules
+5 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\core\node_modules
+6 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\core\node_modules
+7 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-arm\node_modules
+8 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-arm\node_modules
+9 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-host-names\node_modules
+10 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-host-names\node_modules
+11 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-arm\node_modules
+12 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-script\node_modules
+13 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-script\node_modules
+14 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\arm-helper\node_modules
+15 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-template\node_modules
+16 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-template\node_modules
+17 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-host-names\node_modules
+18 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-traffic-manager\node_modules
+19 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-traffic-manager\node_modules
+20 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-script\node_modules
+21 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-utils\node_modules
+22 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-utils\node_modules
+23 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\core\node_modules
+24 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-webapp-conatiner\node_modules
+25 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-webapp-conatiner\node_modules
+26 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-traffic-manager\node_modules
+27 info clean removing C:\Users\csperbeck\source\repos\azure-bake\packages\system\node_modules
+28 silly rimrafDir C:\Users\csperbeck\source\repos\azure-bake\packages\system\node_modules
+29 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-utils\node_modules
+30 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-template\node_modules
+31 verbose rimrafDir removed C:\Users\csperbeck\source\repos\azure-bake\packages\ingredient-webapp-conatiner\node_modules
+32 error Error: Command failed: C:\Program Files\nodejs\node.exe C:\Users\csperbeck\AppData\Roaming\npm\node_modules\lerna\node_modules\rimraf\bin.js --no-glob C:\Users\csperbeck\source\repos\azure-bake\packages\system\node_modules\
+32 error     at makeError (C:\Users\csperbeck\AppData\Roaming\npm\node_modules\lerna\node_modules\execa\index.js:174:9)
+32 error     at Promise.all.then.arr (C:\Users\csperbeck\AppData\Roaming\npm\node_modules\lerna\node_modules\execa\index.js:278:16)
