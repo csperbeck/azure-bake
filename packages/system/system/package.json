@@ -23,12 +23,6 @@
   "bin": {
     "bake": "dist/index.js"
   },
-  "directories": {
-    "lib": "dist"
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "release": "tsc -p ../core/src && tsc -p ../ingredient/ingredient-arm/src && tsc -p ../ingredient/ingredient-script/src && tsc -p ../ingredient/ingredient-utils/src && tsc -p ./src && npx lerna publish --conventional-commits --yes",
     "upload": "tsc -p ./src && npm --no-git-tag-version version patch && npm publish --access public",
@@ -57,13 +51,8 @@
     "typescript": "^3.2.2"
   },
   "dependencies": {
-<<<<<<< HEAD:packages/system/package.json
-    "@azbake/core": "0.1.17",
-    "@azbake/ingredient-utils": "0.*",
-=======
     "@azbake/core": "^0.1.17",
     "@azbake/ingredient-utils": "^0.0.15",
->>>>>>> master:system/package.json
     "@azure/arm-resources": "^1.0.0",
     "@azure/ms-rest-nodeauth": "^0.8.3",
     "azcli-npm": "^1.1.3",
@@ -71,6 +60,5 @@
     "js-yaml": "^3.12.0",
     "minimist": "^1.2.0"
   },
-  "main": "dist/index.js",
-  "typings": "src/index.ts"
+  "main": "dist/index.js"
 }

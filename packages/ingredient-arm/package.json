@@ -33,9 +33,13 @@
     "@types/node": "^10.12.18"
   },
   "dependencies": {
+<<<<<<< HEAD:packages/ingredient-arm/package.json
     "@azbake/arm-helper": "0.*",
     "@azbake/core": "^0.1.0",
     "@azure/ms-rest-nodeauth": ">= 0.8.3"
+=======
+    "@azbake/arm-helper": "0.*"
+>>>>>>> master:ingredient/ingredient-arm/package.json
   },
   "publishConfig": {
     "access": "public"
