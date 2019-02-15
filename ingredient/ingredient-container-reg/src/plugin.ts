@@ -12,7 +12,7 @@ export class ContainerRegPlugin extends BaseIngredient {
 
             let props = helper.BakeParamsToARMParams(this._name, this._ingredient.properties.parameters);
 
-            await helper.DeployTemplate(this._name, ARMTemplate, props, util.resource_group)
+            await helper.DeployTemplate(this._name, ARMTemplate, props, util.resource_group())
 
         } catch(error){
             this._logger.error('deployment failed: ' + error)
