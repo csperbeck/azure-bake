@@ -3,8 +3,12 @@
   "description": "Ingredient for deploying an instance of an Application Insights resource",
   "version": "0.0.1",
   "main": "dist/index.js",
+  "typings": "src/index.ts",
+  "directories": {
+    "lib": "dist"
+  },
   "author": "HCHB",
-  "license": "",
+  "license": "MIT",
   "scripts": {
     "upload": "tsc -p ./src && npm --no-git-tag-version version patch && npm publish --access public",
     "compile": "tsc -p ./src",
