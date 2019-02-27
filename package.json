@@ -7,6 +7,7 @@
     "typescript": "^3.3.3"
   },
   "scripts": {
+    "preinstall": "npm install lerna@3.13.0 --global",
     "clean:build": "lerna clean --yes && lerna bootstrap --hoist && lerna run compile",
     "load:build": "lerna bootstrap --hoist && lerna run compile",
     "build": "lerna bootstrap --hoist && lerna run compile",
