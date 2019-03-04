@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {        
+        "conatinerName": {
+            "type": "string"
+        },
+        "storageAccountName": {
+            "type": "string"
+        },
+        "accessLevel": {
+            "type": "string",
+            "defaultValue": "None",
+            "allowedValues": [
+                "None",
+                "Blob",
+                "Container"
+            ]
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "name": "[concat('default/', parameters('containerName'))]",
+            "location": "[parameters('location')]",
+            "apiVersion": "2018-02-01",         
+            "properties": {
+                "publicAccess": "[parameters('accessLevel')]"
+            },
+            "dependsOn": [
+                "[parameters('storageAccountName')]"
+            ]
+        }
+    ]
+}
