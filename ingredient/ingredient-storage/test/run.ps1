@@ -44,7 +44,7 @@ else
 }
 
 #Run and push the container
-docker build --build-arg git_repo=$git_repo git_branch=$git_branch --tag "storage-test:dev" -f Dockerfile
+docker-compose up
 if (![string]::IsNullOrEmpty($ENV:CONTAINER_URI)) 
 { 
     docker push "$ENV:CONTAINER_URI/storage-test" 
