@@ -37,8 +37,8 @@ $git_branch = "$BUILD_SOURCEBRANCH"
 
 #Run different dockerfile depending on run location
 if [[ -z "${AGENT_ID}"]]
-    then docker build --build-arg git_repo="$git_repo" git_branch="$git_branch" -t localhost/storage-test:dev -f Dockerfile
-    else docker build --build-arg git_repo="$git_repo" git_branch="$git_branch" -t localhost/storage-test:dev -f Dockerfile
+    then docker build . -t localhost/storage-test:dev --build-arg git_repo="$git_repo" --build-arg git_branch="$git_branch"
+    else docker build . -t localhost/storage-test:dev --build-arg git_repo="$git_repo" --build-arg git_branch="$git_branch"
 fi
 
 #Run the container with environment secrets

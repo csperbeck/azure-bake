@@ -1,0 +1,9 @@
+version: '3'
+services:
+  storage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+       - "git_repo=${git_repo}"
+       - "git_branch=${git_branch}" 
