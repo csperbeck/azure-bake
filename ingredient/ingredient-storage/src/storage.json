@@ -8,14 +8,7 @@
             "metadata": {
                 "description": "Location for all resources."
             }
-        },
-        "restriction": {
-            "type": "string",
-            "defaultValue": "NotAvailableForSubscription",
-            "metadata": {
-                "description": "Restrictions on the deployment of this resource."
-            }
-        },
+        },        
         "storageAccountType": {
             "type": "string",
             "defaultValue": "Standard_LRS",
@@ -55,21 +48,16 @@
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "name": "[variables('storageAccountName')]",
+            "name": "[parameters('storageAccountName')]",
             "location": "[parameters('location')]",
             "apiVersion": "2018-02-01",
             "sku": {
                 "name": "[parameters('storageAccountType')]",
-                "tier": "[parameters('storageTier')]",
-                "restrictions": [
-                    {
-                        "reasonCode": "[parameters('restrictions')]"
-                    }
-                ]
+                "tier": "[parameters('storageTier')]"                
             },
             "kind": "[parameters('storageKind')]",
             "properties": {
-                "accessTier": "[parameters('storagAccessTier')]"
+                "accessTier": "[parameters('storageAccessTier')]"
             }
         }
     ]
