@@ -23,4 +23,23 @@ if [ -z "$BAKE_AUTH_SERVICE_KEY" ]
     else echo "Azure Service Key is already set!"
 fi
 
+if [ -z "$CONTAINER_URI" ]
+    then read -p "Enter container repostiory URL: " cont_uri 
+    export CONTAINER_URI="$cont_uri"
+    else echo "Container Repository URL is already set!"
+fi
+
 docker build .
+
+#Set environment variables as local for Dockerfile
+$git_repo = "$BUILD_REPOSITORY_URI"
+$git_branch = "$BUILD_SOURCEBRANCH"
+
+#Run different dockerfile depending on run location
+if [[ -z "${AGENT_ID}"]]
+    then docker build --build-arg git_repo="$git_repo" git_branch="$git_branch" -t localhost/storage-test:dev -f Dockerfile
+    else docker build --build-arg git_repo="$git_repo" git_branch="$git_branch" -t localhost/storage-test:dev -f Dockerfile
+fi
+
+#Run the container with environment secrets
+docker run -e "container_uri=$CONTAINER_URI" -e "BAKE_AUTH_SUBSCRIPTION_ID=$BAKE_AUTH_SUBSCRIPTION_ID" -e "BAKE_AUTH_SERVICE_ID=$BAKE_AUTH_SERVICE_ID" -e "BAKE_AUTH_SERVICE_KEY=$BAKE_AUTH_SERVICE_KEY" -e "BAKE_AUTH_TENANT_ID=$BAKE_AUTH_TENANT" -rm storage-test:latest
