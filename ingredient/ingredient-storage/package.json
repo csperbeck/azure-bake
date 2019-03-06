@@ -1,6 +1,6 @@
 {
     "name": "@azbake/ingredient-storage",
-    "description": "Ingredient for deploying an storage account and assocaited blobs",
+    "description": "Ingredient for deploying a storage account",
     "version": "0.0.1",
     "main": "dist/index.js",
     "typings": "src/index.ts",
