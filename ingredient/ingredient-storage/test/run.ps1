@@ -37,22 +37,11 @@ else { Write-Host "Container Repository URL is already set!" }
 $global:git_repo = $(git config --get remote.origin.url)
 $global:git_branch = $(git rev-parse --abbrev-ref HEAD)
 
-Get-Content ./template.yml -Raw | Foreach-Object {
-    $_  -replace '\$\{git_repo\}', $git_repo `
-    -replace '\$\{git_branch\}', $git_branch `
-    -replace '\$\{BAKE_AUTH_SUBSCRIPTION_ID\}', $ENV:BAKE_AUTH_SUBSCRIPTION_ID `
-    -replace '\$\{BAKE_AUTH_SERVICE_ID\}', $ENV:BAKE_AUTH_SERVICE_ID `
-    -replace '\$\{BAKE_AUTH_SERVICE_KEY\}', $ENV:BAKE_AUTH_SERVICE_KEY `
-    -replace '\$\{BAKE_AUTH_TENANT_ID\}', $ENV:BAKE_AUTH_TENANT_ID `
-    -replace '\$\{CONTAINER_URI\}', $ENV:CONTAINER_URI `
-} | Set-Content ./docker-compose.yml 
-
-#docker-compose up --remove-orphans --build --force-recreate
-#Remove-Item ./docker-compose.yml
+node ../../system/dist/index.js mix --name "storage-test:latest" --runtime "latest" test.yaml
 
 #Run and push the container
 if (![string]::IsNullOrEmpty($ENV:CONTAINER_URI)) 
 { 
-    docker tag storage-test 'charlietest.azurecr.io/storage-test'
+    docker tag storage-test "$ENV:CONTAINER_URI/storage-test" 
     docker push "$ENV:CONTAINER_URI/storage-test:latest" 
 }
