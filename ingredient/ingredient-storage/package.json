@@ -24,6 +24,6 @@
     },
     "dependencies": {
       "@azbake/arm-helper": "0.*",
-      "@azbake/core": "0.*",
+      "@azbake/core": "0.*"
     }
   }
