@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.1.25](https://github.com/HomecareHomebase/azure-bake/compare/v0.1.24...v0.1.25) (2019-03-07)
+## [0.1.25](https://github.com/HomecareHomebase/azure-bake/compare/v0.1.24...v0.1.25) (2019-03-06)
 
 **Note:** Version bump only for package @azbake/ingredient-traffic-manager
 
