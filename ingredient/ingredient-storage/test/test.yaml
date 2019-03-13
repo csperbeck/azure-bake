@@ -2,7 +2,7 @@ name: storage-test
 shortName: strtest
 version: 1.0.0
 ingredients:
-  - "@azbake/ingredient-storage@~0"
+  - "@azbake/ingredient-storage@0.0.3"
 resourceGroup: true
 rgOverride: "test"
 parallelRegions: false

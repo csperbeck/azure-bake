@@ -17,4 +17,6 @@ RUN npm link
 RUN mkdir config
 RUN mkdir package
 
+RUN npm install @azbake/ingredient-storage
+
 CMD [ "bake", "serve", "/app/bake/package/bake.yaml" ]
