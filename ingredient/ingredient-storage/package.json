@@ -19,12 +19,10 @@
     "@azure/ms-rest-nodeauth": "0.*"
   },
   "devDependencies": {
-    "@azure/ms-rest-nodeauth": "0.*",
     "@types/node": "^10.12.18"
   },
   "dependencies": {
-    "@azbake/arm-helper": "^0.1.32",
-    "@azbake/core": "0.*"
+    "@azbake/arm-helper": "^0.1.32"
   },
   "gitHead": "6a2315cfe31f9bc9a139f99e863c5b35686fd5e7"
 }
