@@ -1,7 +1,6 @@
 import { BaseIngredient, IngredientManager } from "@azbake/core"
 import { IIngredient,  DeploymentContext } from "@azbake/core";
 import * as fs from 'fs'
-// import { ResourceManagementClient } from "@azure/arm-resources"
 import { ARMHelper } from "@azbake/arm-helper";
 
 
