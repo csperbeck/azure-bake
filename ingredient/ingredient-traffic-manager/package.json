@@ -28,9 +28,6 @@
     "@azure/ms-rest-nodeauth": "0.*"
   },
   "devDependencies": {
-    "@azbake/core": "^0.1.30",
-    "@azbake/ingredient-utils": "^0.1.31",
-    "@azure/ms-rest-nodeauth": "0.*",
     "@types/node": "^10.12.18"
   },
   "dependencies": {
