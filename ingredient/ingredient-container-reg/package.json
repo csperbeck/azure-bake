@@ -11,7 +11,6 @@
     "watch": "tsc -w -p ."
   },
   "peerDependencies": {
-    "@azbake/arm-helper": "0.*",
     "@azbake/core": "0.*",
     "@azure/ms-rest-nodeauth": "0.*"
   },
@@ -20,8 +19,6 @@
   },
   "dependencies": {
     "@azbake/arm-helper": "^0.1.32",
-    "@azbake/core": "^0.1.12",
-    "@azure/ms-rest-nodeauth": "^0.9.1"
   },
   "gitHead": "6a2315cfe31f9bc9a139f99e863c5b35686fd5e7"
 }
