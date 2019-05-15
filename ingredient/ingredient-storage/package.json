@@ -25,7 +25,10 @@
   },
   "dependencies": {
     "@azbake/arm-helper": "^0.1.46",
-    "@azure/arm-storage": "^8.0.0"
+    "@azure/arm-storage": "^8.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "ts-node": "^8.1.0"
   },
   "gitHead": "dfddb0fc587d47c1d9aad2ff6ef877ef73260ef4"
 }

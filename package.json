@@ -11,5 +11,8 @@
     "load:build": "lerna bootstrap --hoist && lerna run compile",
     "build": "lerna bootstrap --hoist && lerna run compile",
     "publish": "npm run clean:build && lerna publish --conventional-commits --yes"
+  },
+  "dependencies": {
+    "@kubernetes/client-node": "^0.8.2"
   }
 }
