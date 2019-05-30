@@ -1,11 +1,15 @@
+<<<<<<< HEAD
 import { BaseUtility, IngredientManager } from '@azbake/core';
 import { ServiceBusManagementClient } from '@azure/arm-servicebus';
+=======
+import {BaseUtility, IngredientManager} from '@azbake/core'
+>>>>>>> restored sb namespace from master
 
 export class ServiceBusNamespaceUtils extends BaseUtility {
 
     public create_resource_name(): string {
         let util = IngredientManager.getIngredientFunction("coreutils", this.context)
-        const name = util.create_resource_name("sb_ns", null, false);
+        const name = util.create_resource_name("sbn", null, false);
         return name;
     }
 
