@@ -1,6 +1,6 @@
 {
   "name": "@azbake/ingredient-service-bus-queue",
-  "description": "Ingredient for deploying an instance of Service Bus Queue on a Namespace.",
+  "description": "Ingredient for deploying an instance of Service Bus Queue for a Namespace.",
   "version": "0.1.0",
   "main": "dist/index.js",
   "typings": "src/index.ts",
@@ -34,13 +34,10 @@
     "@types/node": "^10.12.18"
   },
   "dependencies": {
-    "@azbake/arm-helper": "^0.1.47",
-    "@azure/arm-resources": "^1.0.1",
-    "@azure/arm-servicebus": "^3.2.0",
-    "@azure/service-bus": "^1.0.2",
-    "colors": "^1.3.3"
+    "@azure/service-bus": "^1.0.2"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": ""
 }
