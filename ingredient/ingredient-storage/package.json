@@ -24,7 +24,7 @@
     "@types/node": "^10.12.18"
   },
   "dependencies": {
-    "@azbake/arm-helper": "^0.1.47",
+    "@azbake/arm-helper": "~0",
     "@azure/arm-storage": "^8.0.0",
     "@azure/storage-blob": "^10.3.0"
   },

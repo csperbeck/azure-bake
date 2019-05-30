@@ -40,10 +40,24 @@ public create_resource_name(): string {
        const client = new ServiceBusManagementClient(this.context.AuthToken, this.context.Environment.authentication.subscriptionId);
        let response = await client.queues.listAuthorizationRules(rg, ns, name);
 
-       let key: string = ""
+       let rule: string = ""
         if (response.keys) {
             rule = response.keys[0].value || ""
         }
         return rule
     }
+
+    /*public async create_servicebus_queue(ns: string, name: string, authRule: string, rg: string) {
+        let util = IngredientManager.getIngredientFunction("coreutils", this.context)
+        let resource_group = rg || await util.resource_group()
+
+       const client = new ServiceBusManagementClient(this.context.AuthToken, this.context.Environment.authentication.subscriptionId);
+       let response = await clien
+
+       let rule: string = ""
+        if (response.keys) {
+            rule = response.keys[0].value || ""
+        }
+        return rule
+    }*/
 }

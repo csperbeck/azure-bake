@@ -1,11 +1,19 @@
 {
-  "name": "@azbake/ingredient-servicebus-queue",
-  "description": "Ingredient for deploying a service bus queue",
+  "name": "@azbake/ingredient-service-bus-queue",
+  "description": "Ingredient for deploying an instance of Service Bus Queue on a Namespace.",
   "version": "0.1.0",
   "main": "dist/index.js",
   "typings": "src/index.ts",
   "author": "HCHB",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HomecareHomebase/azure-bake.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HomecareHomebase/azure-bake/issues"
+  },
+  "homepage": "https://github.com/HomecareHomebase/azure-bake",
   "scripts": {
     "upload": "tsc -p . && npm --no-git-tag-version version patch && npm publish --access public",
     "compile": "tsc -p .",
@@ -16,15 +24,23 @@
   },
   "peerDependencies": {
     "@azbake/core": "0.*",
+    "@azbake/ingredient-utils": "0.*",
     "@azure/ms-rest-nodeauth": "0.9.2"
   },
   "devDependencies": {
     "@azbake/core": "^0.1.47",
+    "@azbake/ingredient-utils": "^0.1.47",
     "@azure/ms-rest-nodeauth": "0.9.2",
     "@types/node": "^10.12.18"
   },
   "dependencies": {
-    "@azbake/arm-helper": "^0.1.47"
+    "@azbake/arm-helper": "^0.1.47",
+    "@azure/arm-resources": "^1.0.1",
+    "@azure/arm-servicebus": "^3.2.0",
+    "@azure/service-bus": "^1.0.2",
+    "colors": "^1.3.3"
   },
-  "gitHead": ""
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -12,5 +12,8 @@
     "load:ingredients": "lerna run link:ingredients",
     "build": "lerna bootstrap --hoist && lerna run compile",
     "publish": "npm run clean:build && lerna publish --conventional-commits --yes"
+  },
+  "dependencies": {
+    "@azure/service-bus": "^1.0.2"
   }
 }
