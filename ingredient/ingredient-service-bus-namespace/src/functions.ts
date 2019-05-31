@@ -7,9 +7,15 @@ import {BaseUtility, IngredientManager} from '@azbake/core'
 
 export class ServiceBusNamespaceUtils extends BaseUtility {
 
-    public create_resource_name(): string {
+    public create_resource_name(app: string): string {
         let util = IngredientManager.getIngredientFunction("coreutils", this.context)
-        const name = util.create_resource_name("sbn", null, false);
+        let name = ''
+        if (app) {
+            name = util.create_resource_name("sbn", app, false);
+        }
+        else {
+            name = util.create_resource_name("sbn", null, false);
+        }
         return name;
     }
 

@@ -1,63 +1,46 @@
-import { BaseUtility, IngredientManager } from '@azbake/core'
-import { ServiceBusManagementClient } from '@azure/arm-servicebus'
-/*"outputs": {
-      "NamespaceConnectionString": {
-        "type": "string",
-        "value": "[listkeys(variables('authRuleResourceId'), '2017-04-01').primaryConnectionString]"
-      },
-      "SharedAccessPolicyPrimaryKey": {
-        "type": "string",
-        "value": "[listkeys(variables('authRuleResourceId'), '2017-04-01').primaryKey]"
-      }
-    }*/
+const core = require('@azbake/core')
+const helper = require('./helper')
+const ns = require('@azbake/ingredient-service-bus-namespace')
+
+const BaseUtility = core.BaseUtility
+const IngredientManager = core.IngredientManager
+
 
 export class ServiceBusQueueUtils extends BaseUtility {
 
-public create_resource_name(): string {
+    public create_resource_name(app?: string): string {
         let util = IngredientManager.getIngredientFunction("coreutils", this.context)
-        const name = util.create_resource_name("sb_ns", null, false);
+        const name = util.create_resource_name("sbn_q", app, false);
         return name;
-}
-
-    public async get_queue_pk(ns: string, name: string, authRule: string, rg: string) {
-        let util = IngredientManager.getIngredientFunction("coreutils", this.context)
-        let resource_group = rg || await util.resource_group()
-
-       const client = new ServiceBusManagementClient(this.context.AuthToken, this.context.Environment.authentication.subscriptionId);
-       let response = await client.queues.listKeys(rg, ns, name, authRule);
-
-       let key: string = ""
-        if (response.keys) {
-            key = response.keys[0].value || ""
-        }
-        return key        
-    }
-   
-    public async get_queue_authrule(ns: string, name: string, authRule: string, rg: string) {
-        let util = IngredientManager.getIngredientFunction("coreutils", this.context)
-        let resource_group = rg || await util.resource_group()
-
-       const client = new ServiceBusManagementClient(this.context.AuthToken, this.context.Environment.authentication.subscriptionId);
-       let response = await client.queues.listAuthorizationRules(rg, ns, name);
-
-       let rule: string = ""
-        if (response.keys) {
-            rule = response.keys[0].value || ""
-        }
-        return rule
     }
 
-    /*public async create_servicebus_queue(ns: string, name: string, authRule: string, rg: string) {
-        let util = IngredientManager.getIngredientFunction("coreutils", this.context)
-        let resource_group = rg || await util.resource_group()
+    public get_auth_rules(nsApp?: string, app?: string, rg: string = this.context.Config.variables.rgOverride): Array<string> {
+        let nsName = ns.create_resource_name(nsApp)
+        let queueName = this.create_resource_name(app)
+        let baseUri = `https://${nsName}.servicebus.windows.net/${queueName}`
+        let sbClient = helper.sbLogin(this.context.AuthToken, this.context.Environment.authentication.subscriptionId, baseUri)
+        let authRules = sbClient.listAuthorizationRules(rg, nsName, queueName)
+        let authRuleNames = authRules.from(x => x.name);
+        return authRuleNames
+    }
 
-       const client = new ServiceBusManagementClient(this.context.AuthToken, this.context.Environment.authentication.subscriptionId);
-       let response = await clien
-
-       let rule: string = ""
-        if (response.keys) {
-            rule = response.keys[0].value || ""
+    public get_queue_keys(nsApp?: string, app?: string, rg: string = this.context.Config.variables.rgOverride, authRule?: string): Array<any> {
+        let nsName = ns.create_resource_name(nsApp)
+        let queueName = this.create_resource_name(app)
+        let rule = this.get_auth_rules(nsApp, app, rg)
+        let ruleMatch = rule[0]
+        if (authRule) {
+            rule.forEach(item => {
+                if (item.match(authRule)) {
+                    ruleMatch = item
+                }
+            });    
         }
-        return rule
-    }*/
+
+        let baseUri = `https://${nsName}.servicebus.windows.net/${queueName}`
+        let sbClient = helper.sbLogin(this.context.AuthToken, this.context.Environment.authentication.subscriptionId, baseUri)
+        let queueKeys = sbClient.listKeys(rg, nsName, queueName, ruleMatch)
+        //Returns Servicebus AccessKeys object
+        return queueKeys
+    }
 }
