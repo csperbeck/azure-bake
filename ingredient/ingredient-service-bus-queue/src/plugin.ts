@@ -1,8 +1,7 @@
 const core = require('@azbake/core');
-const sb = require("@azure/service-bus");
 const h = require('./helper')
 const f = require('./functions')
-import { ServiceBusManagementClient } from '@azure/arm-servicebus';
+import { ServiceBusManagementClient, ServiceBusManagementModels, ServiceBusManagementMappers } from '@azure/arm-servicebus';
 import { SBQueue } from '@azure/arm-servicebus/esm/models/mappers';
 //const { ServiceBusClient } = require("@azure/service-bus"); 
 //const nsing = require('@azbake/ingredient-service-bus-namespace')
@@ -23,13 +22,9 @@ export class ServiceBusQueue extends BaseIngredient {
             let qe = IngredientManager.getIngredientFunction("servicebusnamespace", this._ctx)
             let nsName = 'ptstsbntstpkg'//ctxVars.name_space || ns.create_resource_name()         
             let queueName = 'sb-qe-charliedev' //ctxVars.queue_name || f.create_resource_name()
-            let baseUri = `https://${nsName}.servicebus.windows.net/${queueName}`
-            //let sbc = ServiceBusClient.createFromTokenProvider(baseUri, this._ctx.AuthToken)
-            let sbClient = new ServiceBusManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId)                      
-            this._logger.log(sbClient.namespaces.list)
-            this._logger.log('Service Bus Queue Plugin Logging: ' + this._ingredient.properties.source)
-               
-            
+            let baseUri = `https://${nsName}.servicebus.windows.net/${queueName}`            
+            let sbClient = new ServiceBusManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId)                                  
+            this._logger.log('Service Bus Queue Plugin Logging: ' + this._ingredient.properties.source)           
             
             /*{lockDuration: "PT5M",
                                  maxSizeInMegabytes: "1024",
