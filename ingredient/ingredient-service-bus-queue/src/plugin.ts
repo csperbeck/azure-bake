@@ -2,7 +2,10 @@ const core = require('@azbake/core');
 const sb = require("@azure/service-bus");
 const h = require('./helper')
 const f = require('./functions')
-const ns = require('@azbake/ingredient-service-bus-namespace')
+import { ServiceBusManagementClient } from '@azure/arm-servicebus';
+import { SBQueue } from '@azure/arm-servicebus/esm/models/mappers';
+//const { ServiceBusClient } = require("@azure/service-bus"); 
+//const nsing = require('@azbake/ingredient-service-bus-namespace')
 
 const ARMHelper = core.ARMHelper;
 const ARMTemplate = core.ARMTemplate;
@@ -16,26 +19,32 @@ export class ServiceBusQueue extends BaseIngredient {
         try {
             let ctxVars = this._ctx.Config.variables
             let util = IngredientManager.getIngredientFunction("coreutils", this._ctx)
-            this._logger.log('Service Bus Queue Plugin Logging: ' + this._ingredient.properties.source)
-            let nsName = ctxVars.name_space || ns.create_resource_name()
-            let queueName = ctxVars.queue_name || this.create_resource_name()
+            let ns = IngredientManager.getIngredientFunction("servicebusnamespace", this._ctx)
+            let qe = IngredientManager.getIngredientFunction("servicebusnamespace", this._ctx)
+            let nsName = 'ptstsbntstpkg'//ctxVars.name_space || ns.create_resource_name()         
+            let queueName = 'sb-qe-charliedev' //ctxVars.queue_name || f.create_resource_name()
             let baseUri = `https://${nsName}.servicebus.windows.net/${queueName}`
-            let sbClient = h.sbLogin(this.context.AuthToken, this.context.Environment.authentication.subscriptionId, baseUri, )
-            /*
-            "lockDuration": "PT5M",
-                        "maxSizeInMegabytes": "1024",
-                        "requiresDuplicateDetection": "false",
-                        "requiresSession": "false",
-                        "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
-                        "deadLetteringOnMessageExpiration": "false",
-                        "duplicateDetectionHistoryTimeWindow": "PT10M",
-                        "maxDeliveryCount": "10",
-                        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
-                        "enablePartitioning": "false",
-                        "enableExpress": "false"
-            */
+            //let sbc = ServiceBusClient.createFromTokenProvider(baseUri, this._ctx.AuthToken)
+            let sbClient = new ServiceBusManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId)                      
+            this._logger.log(sbClient.namespaces.list)
+            this._logger.log('Service Bus Queue Plugin Logging: ' + this._ingredient.properties.source)
+               
+            
+            
+            /*{lockDuration: "PT5M",
+                                 maxSizeInMegabytes: "1024",
+                                 requiresDuplicateDetection: "false",
+                                 requiresSession: "false",
+                                 defaultMessageTimeToLive: "P10675199DT2H48M5.4775807S",
+                                 deadLetteringOnMessageExpiration: "false",
+                                 duplicateDetectionHistoryTimeWindow: "PT10M",
+                                 maxDeliveryCount: "10",
+                                 autoDeleteOnIdle: "P10675199DT2H48M5.4775807S",
+                                 enablePartitioning: "false",
+                                 enableExpressS: "false" }*/
+            
 
-            await sbClient.createOrUpdate(ctxVars.resourceGroup || ctxVars.rgOverride, nsName, queueName)
+            //await sbClient.queues.createOrUpdate(ctxVars.resourceGroup, nsName, queueName)
 
         } catch(error){
             this._logger.error('deployment failed: ' + error)
