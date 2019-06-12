@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 import { BaseUtility, IngredientManager } from '@azbake/core';
 import { ServiceBusManagementClient } from '@azure/arm-servicebus';
-=======
-import {BaseUtility, IngredientManager} from '@azbake/core'
->>>>>>> restored sb namespace from master
 
 export class ServiceBusNamespaceUtils extends BaseUtility {
 
