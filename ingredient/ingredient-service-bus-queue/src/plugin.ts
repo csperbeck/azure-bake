@@ -3,8 +3,6 @@ const h = require('./helper')
 const f = require('./functions')
 import { ServiceBusManagementClient, ServiceBusManagementModels, ServiceBusManagementMappers } from '@azure/arm-servicebus';
 import { SBQueue } from '@azure/arm-servicebus/esm/models/mappers';
-//const { ServiceBusClient } = require("@azure/service-bus"); 
-//const nsing = require('@azbake/ingredient-service-bus-namespace')
 
 const ARMHelper = core.ARMHelper;
 const ARMTemplate = core.ARMTemplate;
