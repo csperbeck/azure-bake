@@ -14,19 +14,35 @@ const shell = require('gulp-shell');
 const params = require('./build/parameters');
 
 function build(done) {
-    if (!params.conditions.isRunningOnADO) { 
-        console.log('Running Local Build');
-        gulp.series(lernaBuild)(done); }
-    else if ( params.conditions.isRunningOnADO ) {
-        if ( !params.build.pullRequestID && !!params.build.buildSourceBranch.replace(/refs\/heads\/(feature\/)?/i, '').match(/master/ig)) {
+    switch(true) {
+        case ( !params.conditions.isRunningOnADO ): 
+            console.log('Running Local Build');
+            gulp.series(lernaBuild)(done);
+        break;
+
+        case ( params.conditions.isRunningOnADO && 
+                !params.build.pullRequestID && 
+                !!params.build.buildSourceBranch.replace(/refs\/heads\/(feature\/)?/i, '').match(/master/ig)):
             console.log('Running Azure DevOps Release Build');
-            return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild, lernaPublish, systemPublish )(done);
-        } else if ( !!params.build.pullRequestID ) {
+            gulp.series( printVersion, adoPrep, toolInstall, lernaBuild, lernaPublish, systemPublish )(done);
+        break;
+
+        case ( params.conditions.isRunningOnADO && 
+                !!params.build.pullRequestID ):
             console.log('Running Azure DevOps Pull Request Build');
-            return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild )(done);
-        } 
+            gulp.series( printVersion, adoPrep, toolInstall, lernaBuild )(done);
+        break;
+        
+        case ( params.conditions.isRunningOnADO && 
+            params.build.buildReason.match(/manual/ig) ):
+            console.log('Running Azure DevOps Manual Build');
+            gulp.series( printVersion, adoPrep, toolInstall, lernaBuild )(done);
+        break;
+
+        default:
+            done('Build did not complete!');
+        break;        
     }
-    else { done('Build did not complete!'); }
 }
 
 function bumpVersion() {
