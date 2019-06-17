@@ -63,6 +63,7 @@ function cleanCoverage() {
 
 function conditions(done) {
     console.log(`Build Conditions: `);
+    console.log(`Is Master? ${!!params.build.buildSourceBranch.replace(/refs\/heads\/(feature\/)?/i, '').match(/master/ig)}`)
     console.log(`Is Agent? ${!!params.agent.agentId}`);
     var release = (!!params.build.buildReason.match(/IndividualCI/ig) || !!params.build.buildReason.match(/BatchedCI/ig)) &&
     !!params.build.buildSourceBranch.replace(/refs\/heads\/(feature\/)?/i, '').match(/master/ig);
