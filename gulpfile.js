@@ -19,7 +19,7 @@ function build(done) {
         if ( !!params.build.pullRequestID ) {
             return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild )(done);
         } 
-        else if ( !params.build.pullRequestID && params.build.buildSourceBranch.match(/master/ig)) {
+        else if ( !params.build.pullRequestID && !!params.build.buildSourceBranch.replace(/refs\/heads\/(feature\/)?/i, '').match(/master/ig)) {
             return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild, lernaPublish, systemPublish )(done);
         }
     }
@@ -37,7 +37,7 @@ function cleanCoverage() {
 }
 
 function adoPrep(done) {
-    var branchName = params.buildSourceBranch;
+    var branchName = params.build.buildSourceBranch;
     if (branchName !== 'master') {
         // all branches have refs/heads/ - we don't need that
         // we will also remove feature/ if it's there
@@ -59,20 +59,6 @@ function toolInstall(done) {
     
     var gitScript = ` npm install lerna@3.13.0 typescript@3.3.3 --global` ;
     console.log('Tool Script: ' + gitScript);
-    return runCmd(gitScript, done);    
-}
-
-function lernaBuild(done) {
-    var branchName = params.build.buildSourceBranch;
-    console.log(branchName);
-    if (branchName !== 'master') {
-        // all branches have refs/heads/ - we don't need that
-        // we will also remove feature/ if it's there
-        branchName = branchName.replace(/refs\/heads\/(feature\/)?/i, '');
-    }
-    
-    var gitScript = ` npm run clean:build` ;
-    console.log('Build Script: ' + gitScript);
     return runCmd(gitScript, done);    
 }
 
