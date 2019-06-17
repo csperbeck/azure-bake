@@ -14,14 +14,17 @@ const shell = require('gulp-shell');
 const params = require('./build/parameters');
 
 function build(done) {
-    if (!params.isRunningOnADO) { gulp.series(lernaBuild)(done); }
+    if (!params.conditions.isRunningOnADO) { 
+        console.log('Running Local Build');
+        gulp.series(lernaBuild)(done); }
     else if ( params.conditions.isRunningOnADO ) {
-        if ( !!params.build.pullRequestID ) {
+        if ( !params.build.pullRequestID && !!params.build.buildSourceBranch.replace(/refs\/heads\/(feature\/)?/i, '').match(/master/ig)) {
+            console.log('Running Azure DevOps Release Build');
+            return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild, lernaPublish, systemPublish )(done);
+        } else if ( !!params.build.pullRequestID ) {
+            console.log('Running Azure DevOps Pull Request Build');
             return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild )(done);
         } 
-        else if ( !params.build.pullRequestID && !!params.build.buildSourceBranch.replace(/refs\/heads\/(feature\/)?/i, '').match(/master/ig)) {
-            return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild, lernaPublish, systemPublish )(done);
-        }
     }
     else { done('Build did not complete!'); }
 }
@@ -108,14 +111,14 @@ function inlineCoverageSource() {
 }
 
 function printVersion(done) {
-    let name = require('./package.json').version;
+    let name = require('./lerna.json').version;
 
-    if (process.env.BUILD_REASON === 'PullRequest') {
+    if (params.build.buildReason === 'PullRequest') {
         // pull requests will be [version]_[source branch name]
-        const branchName = process.env.SYSTEM_PULLREQUEST_SOURCEBRANCH;
+        const branchName = params.system.pullRequestSourceBranch;
         name += '_' + branchName.replace(/refs\/heads\/(feature\/)?/i, '');
-    } else if (process.env.BUILD_SOURCEBRANCHNAME) {
-        const branchName = process.env.BUILD_SOURCEBRANCH;
+    } else if (params.build.buildSourceBranch) {
+        const branchName = params.build.buildSourceBranch;
 
         if (branchName !== 'master') {
             // all branches have refs/heads/ - we don't need that
