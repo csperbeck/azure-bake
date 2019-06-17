@@ -19,7 +19,7 @@ function build(done) {
         if ( !!params.build.pullRequestID ) {
             return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild )(done);
         } 
-        else if ( !params.build.pullRequestID && params.build.buildSourceBranch.match(/master/i) ) {
+        else if ( !params.build.pullRequestID && params.build.buildSourceBranch.match(/master/ig)) {
             return gulp.series( printVersion, adoPrep, toolInstall, lernaBuild, lernaPublish, systemPublish )(done);
         }
     }
@@ -44,7 +44,7 @@ function adoPrep(done) {
         branchName = branchName.replace(/refs\/heads\/(feature\/)?/i, '');
     }
     
-    var gitScript = `sudo git checkout ${branchName}`;
+    var gitScript = ` git checkout ${branchName}`;
     console.log('ADO Prep Script: ' + gitScript);
     return runCmd(gitScript, done);    
 }
@@ -57,7 +57,7 @@ function toolInstall(done) {
         branchName = branchName.replace(/refs\/heads\/(feature\/)?/i, '');
     }
     
-    var gitScript = `sudo npm install lerna@3.13.0 typescript@3.3.3 --global` ;
+    var gitScript = ` npm install lerna@3.13.0 typescript@3.3.3 --global` ;
     console.log('Tool Script: ' + gitScript);
     return runCmd(gitScript, done);    
 }
@@ -71,7 +71,7 @@ function lernaBuild(done) {
         branchName = branchName.replace(/refs\/heads\/(feature\/)?/i, '');
     }
     
-    var gitScript = `sudo npm run clean:build` ;
+    var gitScript = ` npm run clean:build` ;
     console.log('Build Script: ' + gitScript);
     return runCmd(gitScript, done);    
 }
@@ -97,7 +97,7 @@ function lernaPublish(done) {
         branchName = branchName.replace(/refs\/heads\/(feature\/)?/i, '');
     }
     
-    var gitScript = `sudo npm run publish` ;
+    var gitScript = ` npm run publish` ;
     console.log('Build Script: ' + gitScript);
     return runCmd(gitScript, done);    
 }
@@ -110,7 +110,7 @@ function systemPublish(done) {
         branchName = branchName.replace(/refs\/heads\/(feature\/)?/i, '');
     }
     
-    var gitScript = `sudo npm run release-build --prefix ./system` ;
+    var gitScript = ` npm run release-build --prefix ./system` ;
     console.log('Build Script: ' + gitScript);
     return runCmd(gitScript, done);    
 }

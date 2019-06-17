@@ -8,7 +8,7 @@ class agent {
     get agentOsArchitecture() { return process.env.AGENT_OSARCHITECTURE; }    
 }
 
-class build {    
+class build {        
     get pullRequestID() { return process.env.SYSTEM_PULLREQUESTID; }
     get pullRequestSourceBranch() { return process.env.SYSTEM_PULLREQUEST_SOURCEBRANCH; }
     get pullRequestTargetBranch() { return process.env.SYSTEM_PULLREQUEST_TARGETBRANCH; }
@@ -31,7 +31,7 @@ class build {
     get buildRepositoryUri() { return process.env.BUILD_REPOSITORY_URI; }
     get buildRequestedForEmail() { return process.env.BUILD_REQUESTEDFOREMAIL; }
     get buildRequestedForId() { return process.env.BUILD_REQUESTEDFORID; }
-    get buildSourceBranch() { return process.env.BUILD_SOURCEBRANCHNAME || git.revParse({args:'--abbrev-ref HEAD'}, function (err, branch) { return branch; }); } 
+    get buildSourceBranch() { return process.env.BUILD_SOURCEBRANCHNAME; } 
     get buildSourceTfvcShelveSet() { return process.env.BUILD_SOURCETFVCSHELVESET; }
     get buildSourceVersionMesage() { return process.env.BUILD_SOURCEVERSIONMESSAGE; }    
     get buildTriggeredByBuildId() { return process.env.BUILD_TRIGGEREDBY_BUILID; }
@@ -40,7 +40,6 @@ class build {
     get buildTriggeredByDefinitionName() { return process.env.BUILD_TRIGGEREDBY_DEFINITIONNAME; }
     get buildTriggeredByProjectId() { return process.env.BUILD_TRIGGEREDBY_PROJECTID; }      
 }
-
 
 class conditions {
     get isRunningOnADO() { return !!process.env.AGENT_ID; }
