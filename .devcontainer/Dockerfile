@@ -13,7 +13,7 @@ RUN apt-get update \
    && apt-get -y install --no-install-recommends apt-utils 2>&1
 
 ##Install dependencies
-RUN npm install -g eslint typescript lerna
+RUN npm install -g eslint lerna@3.13.0 typescript@3.3.3
 
 # Verify git and process tools are installed
 RUN apt-get install -y curl \
