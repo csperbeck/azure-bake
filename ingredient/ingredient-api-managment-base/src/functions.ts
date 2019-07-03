@@ -1,4 +1,5 @@
 import {BaseUtility, IngredientManager} from '@azbake/core'
+import { ApiManagementClient } from "@azure/arm-apimanagement"
 
 export class ApimBaseUtil extends BaseUtility {
 
