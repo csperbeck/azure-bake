@@ -9,16 +9,17 @@ export class ApimBase extends BaseIngredient {
 
     public async Execute(): Promise<void> {
         try {
+            this._logger.log(`Azure API Manamgement - Base Logging: ${this._ingredient.properties.source}`)          
             let util = IngredientManager.getIngredientFunction("coreutils", this._ctx)            
             let client = new ApiManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId)
             let aiClient = new ApplicationInsightsManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId);
-            this._logger.log(`Azure API Manamgement - Base Logging: ${this._ingredient.properties.source}`)
             const helper = new ARMHelper(this._ctx);
             let params = await helper.BakeParamsToARMParamsAsync(this._name, this._ingredient.properties.parameters)
+            let serviceName = params["apiManagementServiceName"].value
+            let properties = params["properties"]      
+            let loggerProps = params["logger"]
             await helper.DeployTemplate(this._name, ApimTemplate, params, await util.resource_group())             
-            if (params["properties"].value) {
-                let serviceName = params["apiManagementServiceName"].value
-                let properties = params["properties"]          
+            if (properties.value) {          
                 let keys = Object.keys(params["properties"])
                 keys.forEach(item => {
                     this._logger.log(`Deploying property ${item}`)
@@ -34,13 +35,20 @@ export class ApimBase extends BaseIngredient {
                                                                                                         value: subProps["value"].value }
                     )                                        
                 }); 
-
-                if (params["logger"].value) {
-                    let aiInstance = aiClient.components.get(util.resource_group(), params["logger"].value)
-                    this._logger.log(`Key ${aiInstance["InstrumentationKey"].value}`)
-                    client.logger.createOrUpdate(util.resource_group(), serviceName, params["logger"].value, aiInstance["InstrumentationKey"].value)
-                }
             }
+            
+            if (loggerProps.value) {
+                let response = await aiClient.components.get(util.resource_group(), loggerProps.value)
+                let key: string = ""
+                if (response.instrumentationKey) {
+                    key = response.instrumentationKey || ""
+                }                    
+                client.logger.createOrUpdate(await util.resource_group(), serviceName, loggerProps.value, {credentials: { key: key },
+                                                                                                            loggerType: "applicationInsights"
+                                                                                                            }
+                )                    
+            }
+            
         } catch(error){
             this._logger.error('deployment failed: ' + error)
             throw error
