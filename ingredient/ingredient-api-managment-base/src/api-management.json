@@ -34,13 +34,6 @@
           "description": "The pricing tier of this API Management service"
         }
       },
-      "authorizationServer": {
-        "type": "string",
-        "minLength": 1,
-        "metadata": {
-          "description": "The hchb authorizaton server"
-        }
-      },
       "skuCount": {
         "type": "int",
         "defaultValue": 1,
@@ -64,46 +57,6 @@
         "type": "string",
         "metadata": {
           "description": "Subnet Name"
-        }
-      },
-      "dallasIp": {
-        "type": "string",
-        "defaultValue": 1,
-        "metadata": {
-          "description": "The hchb-apim Dallas Ip Address"
-        }
-      },
-      "davacoIp": {
-        "type": "string",
-        "defaultValue": 1,
-        "metadata": {
-          "description": "The hchb-apim Davaco Ip Address"
-        }
-      },
-      "olympiaIp": {
-        "type": "string",
-        "defaultValue": 1,
-        "metadata": {
-          "description": "The hchb-apim Olympia Ip Address"
-        }
-      },
-      "louisvilleIp": {
-        "type": "string",
-        "defaultValue": 1,
-        "metadata": {
-          "description": "The hchb-apim Lousville Ip Address"
-        }
-      },
-      "applicationType": {
-        "type": "string",
-        "defaultValue": "web",
-        "allowedValues": [
-          "web",
-          "java",
-          "other"
-        ],
-        "metadata": {
-          "description": "Enter the application type."
         }
       },
       "location": {
@@ -177,30 +130,11 @@
           "description": "1 = Basic, 2 = Enterprise"
         }
       },
-      "priceCodeInt": {
-        "type": "int",
-        "defaultValue": "[int(parameters('priceCode'))]",
-        "allowedValues": [
-          1,
-          2
-        ],
-        "metadata": {
-          "description": "Price Code Int Conversion"
-        }
-      },
       "dailyQuota": {
         "type": "string",
         "defaultValue": "100",
         "metadata": {
           "description": "Enter daily quota in GB."
-        }
-      },
-      "dailyQuotaInt": {
-        "type": "int",
-        "defaultValue": "[int(parameters('dailyQuota'))]",
-        "minValue": 1,
-        "metadata": {
-          "description": "Quota Int Conversion"
         }
       },
       "dailyQuotaResetTime": {
@@ -209,28 +143,12 @@
         "metadata": {
           "description": "Enter daily quota reset hour in UTC (0 to 23). Values outside the range will get a random reset hour."
         }
-      },
-      "dailyQuotaResetTimeInt": {
-        "type": "int",
-        "defaultValue": "[int(parameters('dailyQuotaResetTime'))]",
-        "metadata": {
-          "description": "Reset Time Int Conversion"
-        }
-      },
+      },      
       "warningThreshold": {
         "type": "string",
         "defaultValue": "90",
         "metadata": {
           "description": "Enter the % value of daily quota after which warning mail to be sent. "
-        }
-      },
-      "warningThresholdInt": {
-        "type": "int",
-        "defaultValue": "[int(parameters('warningThreshold'))]",
-        "minValue": 1,
-        "maxValue": 100,
-        "metadata": {
-          "description": "Warning Threshold Int Conversion"
         }
       }
     },
@@ -242,14 +160,8 @@
         "Basic",
         "Application Insights Enterprise"
       ],
-      "pricePlan": "[take(variables('priceArray'),parameters('priceCodeInt'))]",
+      "pricePlan": "[take(variables('priceArray'),int(parameters('priceCode')))]",
       "billingplan": "[concat(variables('appInsightsName'),'/', variables('pricePlan')[0])]"
-    },
-    "outputs": {
-      "instrumentationKey": {
-        "type": "string",
-        "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName'))).InstrumentationKey]"
-      }
     },
     "resources": [
       {
@@ -280,109 +192,6 @@
             "location": "[resourceGroup().location]"
           }
         }
-      },
-      {
-        "type": "Microsoft.ApiManagement/service/properties",
-        "name": "[concat(toLower(parameters('apiManagementServiceName')),'/authorizationServer')]",
-        "apiVersion": "2017-03-01",
-        "properties": {
-          "displayName": "AuthorizationServer",
-          "value": "[parameters('authorizationserver')]",
-          "tags": [
-            "HCHB_APIM"
-          ],
-          "secret": false
-        },
-        "resources": [],
-        "dependsOn": [
-          "[resourceId('Microsoft.ApiManagement/service',toLower(parameters('apiManagementServiceName')))]"
-        ]
-      },
-      {
-        "type": "Microsoft.ApiManagement/service/properties",
-        "name": "[concat(toLower(parameters('apiManagementServiceName')),'/dallasIp')]",
-        "apiVersion": "2017-03-01",
-        "properties": {
-          "displayName": "dallasIp",
-          "value": "[parameters('dallasIp')]",
-          "tags": [
-            "HCHB_APIM"
-          ],
-          "secret": false
-        },
-        "resources": [],
-        "dependsOn": [
-          "[resourceId('Microsoft.ApiManagement/service',toLower(parameters('apiManagementServiceName')))]"
-        ]
-      },
-      {
-        "type": "Microsoft.ApiManagement/service/properties",
-        "name": "[concat(toLower(parameters('apiManagementServiceName')),'/davacoIp')]",
-        "apiVersion": "2017-03-01",
-        "properties": {
-          "displayName": "davacoIp",
-          "value": "[parameters('davacoIp')]",
-          "tags": [
-            "HCHB_APIM"
-          ],
-          "secret": false
-        },
-        "resources": [],
-        "dependsOn": [
-          "[resourceId('Microsoft.ApiManagement/service',toLower(parameters('apiManagementServiceName')))]"
-        ]
-      },
-      {
-        "type": "Microsoft.ApiManagement/service/properties",
-        "name": "[concat(toLower(parameters('apiManagementServiceName')),'/olympiaIp')]",
-        "apiVersion": "2017-03-01",
-        "properties": {
-          "displayName": "olympiaIp",
-          "value": "[parameters('olympiaIp')]",
-          "tags": [
-            "HCHB_APIM"
-          ],
-          "secret": false
-        },
-        "resources": [],
-        "dependsOn": [
-          "[resourceId('Microsoft.ApiManagement/service',toLower(parameters('apiManagementServiceName')))]"
-        ]
-      },
-      {
-        "type": "Microsoft.ApiManagement/service/properties",
-        "name": "[concat(toLower(parameters('apiManagementServiceName')),'/louisvilleIp')]",
-        "apiVersion": "2017-03-01",
-        "properties": {
-          "displayName": "louisvilleIp",
-          "value": "[parameters('louisvilleIp')]",
-          "tags": [
-            "HCHB_APIM"
-          ],
-          "secret": false
-        },
-        "resources": [],
-        "dependsOn": [
-          "[resourceId('Microsoft.ApiManagement/service',toLower(parameters('apiManagementServiceName')))]"
-        ]
-      },
-      {
-        "type": "Microsoft.ApiManagement/service/loggers",
-        "name": "[concat(toLower(parameters('apiManagementServiceName')), '/',variables('appInsightsName'))]",
-        "apiVersion": "2017-03-01",
-        "scale": null,
-        "properties": {
-          "loggerType": "applicationInsights",
-          "description": "Application Insight Instance",
-          "credentials": {
-            "instrumentationKey": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName'))).InstrumentationKey]"
-          },
-          "isBuffered": true
-        },
-        "dependsOn": [
-          "[resourceId('Microsoft.ApiManagement/service', toLower(parameters('apiManagementServiceName')))]",
-          "[resourceId('Microsoft.Insights/components', variables('appInsightsName'))]"
-        ]
-      }      
+      }
     ]
   }

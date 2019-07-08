@@ -1,6 +1,7 @@
 import { BaseIngredient, IngredientManager } from "@azbake/core"
 import { ARMHelper } from "@azbake/arm-helper"
 import { ApiManagementClient } from "@azure/arm-apimanagement"
+import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights'
 import ApimTemplate from "./api-management.json"
 import { KeyPairSyncResult } from "crypto";
 
@@ -10,6 +11,7 @@ export class ApimBase extends BaseIngredient {
         try {
             let util = IngredientManager.getIngredientFunction("coreutils", this._ctx)            
             let client = new ApiManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId)
+            let aiClient = new ApplicationInsightsManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId);
             this._logger.log(`Azure API Manamgement - Base Logging: ${this._ingredient.properties.source}`)
             const helper = new ARMHelper(this._ctx);
             let params = await helper.BakeParamsToARMParamsAsync(this._name, this._ingredient.properties.parameters)
@@ -32,6 +34,12 @@ export class ApimBase extends BaseIngredient {
                                                                                                         value: subProps["value"].value }
                     )                                        
                 }); 
+
+                if (params["logger"].value) {
+                    let aiInstance = aiClient.components.get(util.resource_group(), params["logger"].value)
+                    this._logger.log(`Key ${aiInstance["InstrumentationKey"].value}`)
+                    client.logger.createOrUpdate(util.resource_group(), serviceName, params["logger"].value, aiInstance["InstrumentationKey"].value)
+                }
             }
         } catch(error){
             this._logger.error('deployment failed: ' + error)
