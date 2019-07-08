@@ -41,19 +41,19 @@
           "description": "The instance size of this API Management service."
         }
       },
-      "VirtualNetworkName": {
+      "virtualNetworkName": {
         "type": "string",
         "metadata": {
           "description": "Virtual Network name"
         }
       },
-      "VirtualNetworkResourceGroupName": {
+      "virtualNetworkResourceGroupName": {
         "type": "string",
         "metadata": {
           "description": "Virtual Network name"
         }
       },
-      "SubnetName": {
+      "subnetName": {
         "type": "string",
         "metadata": {
           "description": "Subnet Name"
