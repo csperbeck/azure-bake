@@ -7,10 +7,24 @@ resourceGroup: true
 rgOverride: test
 parallelRegions: false
 recipe:
-  linux-test:
+  apim-test:
     properties:
-      type: "@azbake/ingredient-api-management-api"
+      type: "@azbake/ingredient-api-management-base"
       parameters:
-        apimInstance: "testapim"
-        apiName: "testapi"
-        backend: "testbackend"
+        apiManagementServiceName: charlietestapim
+        publisherEmail: john.smith@contoso.com
+        publisherName: John Smith
+        virtualNetworkName: testvnet
+        virtualNetworkResourceGroupName: test
+        SubnetName: testsubnet
+        Environment: DEV
+        properties:
+          foo:
+            key: bar
+            isSecret: true
+            tags:
+              - test
+              - dev
+        logger:
+          name: testai
+          resourceGroup: test
