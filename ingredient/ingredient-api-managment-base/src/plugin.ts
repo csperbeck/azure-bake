@@ -9,47 +9,76 @@ export class ApimBase extends BaseIngredient {
 
     public async Execute(): Promise<void> {
         try {
-            this._logger.log(`Azure API Manamgement - Base Logging: ${this._ingredient.properties.source}`)          
-            let util = IngredientManager.getIngredientFunction("coreutils", this._ctx)            
+            this._logger.log(`API Manamgement: Base Logging - ${this._ingredient.properties.source}`)
+            let util = IngredientManager.getIngredientFunction("coreutils", this._ctx)
             let client = new ApiManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId)
             let aiClient = new ApplicationInsightsManagementClient(this._ctx.AuthToken, this._ctx.Environment.authentication.subscriptionId);
             const helper = new ARMHelper(this._ctx);
             let params = await helper.BakeParamsToARMParamsAsync(this._name, this._ingredient.properties.parameters)
             let serviceName = params["apiManagementServiceName"].value
-            let properties = params["properties"]      
+            let properties = params["properties"]
             let loggerProps = params["logger"]
-            await helper.DeployTemplate(this._name, ApimTemplate, params, await util.resource_group())             
-            if (properties.value) {          
-                let keys = Object.keys(params["properties"])
-                keys.forEach(item => {
-                    this._logger.log(`Deploying property ${item}`)
-                    let subProps = properties[item].value
+            delete params["properties"]
+            delete params["logger"]
+            //await helper.DeployTemplate(this._name, ApimTemplate, params, await util.resource_group())             
+            if (properties) {
+                let keys = Object.keys(properties.value)
+                let apimRg = await util.resource_group() || ""         
+                let item = ""
+                for (let i = 0; i < keys.length; i++) {
+                    item = keys[i]
+                    this._logger.log(`Property: Deploying anmed value '${item}'`)
+                    let subProps = properties.value[item]
                     let name = item
-                    let propId = name.charAt(0).toUpperCase() + name.slice(1)
-                    let tags = subProps["tags"].value
-                    client.property.createOrUpdate(util.resource_group(), serviceName, propId, {displayName: name, 
-                                                                                                        id: propId, 
-                                                                                                        name: name,
-                                                                                                        tags: tags,
-                                                                                                        secret: subProps["isSecret"].value,
-                                                                                                        value: subProps["value"].value }
-                    )                                        
-                }); 
+                    let propId = name.charAt(0).toLowerCase() + name.slice(1)
+                    let tags = subProps["tags"] || ""
+                    let isSecret = subProps["isSecret"] || false
+                    let value = subProps["key"] || ""
+                    await client.property.createOrUpdate(apimRg, serviceName, propId, {
+                        displayName: name,
+                        id: propId, 
+                        name: name,
+                        tags: tags,
+                        secret: isSecret,
+                        value: value
+                    }
+                    ).then((result) => {
+                        if (result.eTag && result.displayName == name && result.value == value && result.secret == isSecret) {
+                            this._logger.log(`Property: The named value '${name}' was successfully deployed`)
+                        }
+                        else {
+                            throw `Property: The named value '${name}' was not correctly deployed`
+                        }                        
+                    });
+                }
             }
-            
-            if (loggerProps.value) {
-                let response = await aiClient.components.get(util.resource_group(), loggerProps.value)
-                let key: string = ""
+
+            //Create Logger Connection to Application Insights
+            if (loggerProps) {
+                let aiRg = loggerProps.value.resourceGroup || await util.resource_group()
+                let apimRg = await util.resource_group() || ""
+                let aiName = loggerProps.value.name || ""
+                this._logger.log(`Logger: Getting instrumentation key from '${aiName}' in resource group '${aiRg}'`)
+                let response = await aiClient.components.get(aiRg, aiName)
+                let aiKey: string = ""
                 if (response.instrumentationKey) {
-                    key = response.instrumentationKey || ""
-                }                    
-                client.logger.createOrUpdate(await util.resource_group(), serviceName, loggerProps.value, {credentials: { key: key },
-                                                                                                            loggerType: "applicationInsights"
-                                                                                                            }
-                )                    
+                    aiKey = response.instrumentationKey || ""
+                }
+                this._logger.log(`Logger: Deploying Connection for '${aiName}' on '${serviceName}'`)
+                await client.logger.createOrUpdate(apimRg, serviceName, aiName, {
+                    credentials: {instrumentationKey: aiKey},
+                    loggerType: 'applicationInsights'
+                }).then((result) => {
+                    if (result.eTag && result.name == aiName && result.credentials.instrumentationKey && result.loggerType == 'applicationInsights') { 
+                        this._logger.log(`Logger: Deployed '${result.name}' for '${result.loggerType}'`)
+                        
+                    }
+                    else {
+                        throw `Logger: ${aiName} was not deployed correctly`
+                    }
+                });
             }
-            
-        } catch(error){
+        } catch (error) {
             this._logger.error('deployment failed: ' + error)
             throw error
         }
