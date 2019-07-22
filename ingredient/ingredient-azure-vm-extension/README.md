@@ -1,124 +1,64 @@
 ## Changelogs
-* [@azbake/ingredient-event-hub](./CHANGELOG.md)
+* [@azbake/ingredient-function-app](./CHANGELOG.md)
 
 ## Overview
-The Event Hub ingredient is a plugin for Bake.  When included in a recipe, this plugin will create an Event Hub resource within Azure.  It will also create a Shared Access Policy for the Event Hub.
 
-This ingredient does not deploy an Event Hub namespace.  It expects the namespace to already exist.  The namespace can be created in another recipe or within the same recipe.
-
+The Function App ingredient is a plugin for Bake. When included in a recipe, this will create a standard function app for organizing a number of Azure Functions. This ingredient depends on a hosting plan, a Storage account, and an Application Insights resource to be provisioned already, and the names of these resources must be included in the recipe.
 
 ## Usage
 
 ### Recipe
 ```yaml
-#Provide name 
-name: Event Hub Name
-shortName: ehShortName
-version: 0.0.1
-#Specify the names of the ingredients to use in the recipe.  This is the name of the ingredient in package.json.  
-#Specify the local path to the module during development.
+name: My package
+shortName: mypkg
+version: 1.0.0
 ingredients:
-  - "@azbake/ingredient-event-hub"
-  - "@azbake/ingredient-event-hub-namespace"
-#Deploys to regions in parallel.  Typically true unless the sequence of deploying to regions is important.
-parallelRegions: true
+  - "@azbake/ingredient-function-app@~0"
 resourceGroup: true
-variables:
+rgOverride: "resourcegroup1"
+parallelRegions: false
 recipe:
-  #Name the deployment.  This shows up in the log window and is the name of the deployment within Azure.
-  eh-deploy: 
+  funcapp:
     properties:
-      #Specify the Bake ingredient above
-      type: "@azbake/ingredient-event-hub"
-      source: ""
-      parameters:        
-        eventHubName: "[eventhub.create_resource_name()]"        
-        eventHubNamespaceName: "[eventhubnamespace.get_resource_name('diagnostics')]"
-        messageRetentionInDays: "1"
-        partitionCount: "2"
-        policyName: "defaultPolicy"
+      type: "@azbake/ingredient-function-app"
+      parameters:
+        appName: "[functionapputils.create_resource_name()]"
+        planName: "hostingplan2"
+        storageAccountName: "storageaccount3"
+        appInsightsName: "appInsights4"
 ```
 
 | property|required|description|
 |---------|--------|-----------|
-| eventHubName | yes | Name of the Event Hub resource |
-| eventHubNamespaceName | yes | Name of the Event Hub namespace |
-| messageRetentionInDays | no | Number of days to retain a message.  Defaults to 7.  Allowed values are SKU dependent. |
-| partitionCount | no | Number of partitions.  Defaults to 2.  Allowed values are SKU dependent. |
-| location | no | The location for this resource. Default is the parent resource group geographic location |
-| policyName | no | The name of the Shared Access Policy.  Defaults to ListenSend.
-| policyRights | no | The rights to grant the Shared Access Policy.  Defaults to ["Listen", "Send"].
+| appName | yes | Name for the function app resource |
+| planName | yes | Specifies the hosting plan to use for this function app. |
+| storageAccountName | yes | The Storage account to use. It should be able to support the Always On feature for function apps |
+| appInsightsName | yes | The Application Insights resource that this function app will report to |
+| location | no |The location for this resource. Default is the parent resource group geographic location |
 
-See [Event Hub SDK documentation for additional details](https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.management.eventhub.models.eventhub?view=azure-dotnet#properties)
+For hosting plan, storage account, or application insights, indicate the the resource groups they belong to if the function app will be in a different group. Use the following format to specify resource groups. If a resource group is not indicated, it will look for the resources in the same group that the function app is targeting.  
+``<resource_group>/<resource_name>``
 
 ## Utilities
+
 Utility classes can be used inside of the bake.yaml file for parameter and source values.
 
-### ``eventhub`` class
+### ``functionapputils`` class
 
 |function|description|
 |--------|-----------|
-|create_resource_name| Returns the name of the Event Hub |
-|get_primary_key | Returns the primary access key | 
-|get_secondary_key | Returns the secondary access key |
-|get_primary_connectionstring | Returns the primary connection string |
-|get_secondary_connectionstring | Returns the secondary connection string |
+|create_resource_name()| Creates a name for the function app in the format ``<environment_name><region_code>fa<pkg_shortname>``.|
 
 ### Function Details
+
 #### create_resource_name()
-Returns the name of the Event Hub
+Creates a name for the function app in the format ``<environment_name><region_code>fa<pkg_shortname>``
+
 ```yaml
 ...
 parameters:
-    eventHubName: "[eventhub.create_resource_name()]"
+  appName: "[functionapputils.create_resource_name()]"
 ...
 ```
-### Returns
+#### Returns
 string
-
-#### get_primary_key()
-Returns the primary access key
-```yaml
-...
-parameters:
-    primary: "[eventhub.get_primary_key(eventhubnamespace.get_resource_name('ehnName'), eventhub.create_resource_name(), 'defaultPolicy')]"
-...
-```
-### Returns
-string
-
-#### get_secondary_key()
-Returns the secondary access key
-```yaml
-...
-parameters:
-    secondary: "[eventhub.get_secondary_key(eventhubnamespace.get_resource_name('ehnName'), eventhub.create_resource_name(), 'defaultPolicy')]"
-...
-```
-### Returns
-string
-
-
-#### get_primary_connectionstring()
-Returns the primary connection string
-```yaml
-...
-parameters:
-    primary: "[eventhub.get_primary_connectionstring(eventhubnamespace.get_resource_name('ehnName'), eventhub.create_resource_name(), 'defaultPolicy')]"
-...
-```
-### Returns
-string
-
-
-#### get_secondary_connectionstring()
-Returns the secondary connection string
-```yaml
-...
-parameters:
-    secondary: "[eventhub.get_secondary_connectionstring(eventhubnamespace.get_resource_name('ehnName'), eventhub.create_resource_name(), 'defaultPolicy')]"
-...
-```
-### Returns
-string
-
