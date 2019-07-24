@@ -7,4 +7,4 @@ exports.pluginNS = "@azbake/ingredient-azure-vm-extension" //name of the ingredi
 
 /* comment out these entries if you are not including a set of expression functions*/
 exports.functions = VMExtUtils
-exports.functionsNS = "myutils" //bake.yaml expressions can access your functions via "myutils.my_function()"
+exports.functionsNS = "vmextutils" //bake.yaml expressions can access your functions via "myutils.my_function()"
