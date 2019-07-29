@@ -5,7 +5,6 @@ import {ComputeManagementClientContext} from "@azure/arm-compute";
 
 export class VirtualMachineExtensionsUtils extends BaseUtility {
 
-<<<<<<< HEAD
     public create_resource_name() {
 
         let util = IngredientManager.getIngredientFunction("coreutils", this.context)
@@ -55,13 +54,11 @@ export class VirtualMachineExtensionsUtils extends BaseUtility {
         const vm = new VirtualMachineExtensions(client);                          
         let response = await vm.update(rg, vmName, vmExtensionName, extensionParameters) ;                     
         return response;
-=======
     public create_resource_name(): string {
         let util = IngredientManager.getIngredientFunction("coreutils", this.context)
 
         const name = util.create_resource_name("ext", null, true);
         return name;
->>>>>>> added framework logic to construct portions of the ARM template based on recipe parameters
     }   
 }
 

@@ -1,13 +1,20 @@
 import { BaseIngredient, IngredientManager } from "@azbake/core"
 import { ARMHelper } from "@azbake/arm-helper"
+<<<<<<< HEAD
 import  ARMTemplate  from "./arm.json"
 import { utils } from "mocha";
 
 export class VirtualMachineExtensions extends BaseIngredient {
+=======
+import ARMTemplate from "./arm.json"
+
+export class AzureVMExtension extends BaseIngredient {
+>>>>>>> 1ed19959154a731790f45c31f0d8348514332c8a
 
     public async Execute(): Promise<void> {
         try {
             let util = IngredientManager.getIngredientFunction("coreutils", this._ctx)
+<<<<<<< HEAD
             this._logger.log('Virtual Machine Extensions Plugin Logging: ' + this._ingredient.properties.source)
 
             let vmext = IngredientManager.getIngredientFunction("vmextensionsutility", this._ctx)
@@ -20,6 +27,12 @@ export class VirtualMachineExtensions extends BaseIngredient {
            // value = await vmext.delete('test-rg','testvm101','CustomScript')
            // this._logger.log('list :' + JSON.stringify(value))
             
+=======
+            this._logger.log('Azure VM Extension Logging: ' + this._ingredient.properties.source)
+            const helper = new ARMHelper(this._ctx)
+            let params = await helper.BakeParamsToARMParamsAsync(this._name, this._ingredient.properties.parameters)
+
+>>>>>>> 1ed19959154a731790f45c31f0d8348514332c8a
             this._ctx._logger.log(`params ${Object.keys(params.settings)}`)
 
             //stuff to modify ARMTemplate

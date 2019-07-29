@@ -13,10 +13,6 @@
       "metadata": {
         "description": "The name of the extension being deployed."
       }
-<<<<<<< HEAD
-    ]
-  }
-=======
     },
     "publisher": {
       "type": "string",
@@ -51,4 +47,3 @@
     }
   ]
 }
->>>>>>> added framework logic to construct portions of the ARM template based on recipe parameters
