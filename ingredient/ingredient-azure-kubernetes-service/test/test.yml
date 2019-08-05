@@ -1,0 +1,14 @@
+name: aks-test
+shortName: akstest
+version: 0.0.1
+ingredients:
+  - "@azbake/ingredient-azure-kubernetes-service@0~"
+resourceGroup: true
+rgOverride: test
+parallelRegions: false
+recipe:
+  aks-test:
+    properties:
+      type: "@azbake/ingredient-azure-kubernetes-service"
+      parameters:
+        name: "akstest"
