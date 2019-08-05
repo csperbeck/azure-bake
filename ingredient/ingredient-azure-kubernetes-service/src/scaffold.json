@@ -1,0 +1,129 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",    
+    "variables": {
+        "useServicePrincipalDictionary": {
+            "DCOS": 0,
+            "Swarm": 0,
+            "Kubernetes": 1
+        },
+        "servicePrincipalFields": [
+            null,
+            {
+                "ClientId": "[parameters('servicePrincipalClientId')]",
+                "Secret": "[parameters('servicePrincipalClientSecret')]"
+            }
+        ]
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ContainerService/managedClusters",
+            "name": "[parameters('resourceName')]",
+            "apiVersion": "2018-03-31",
+            "location": "[parameters('location')]",
+            "tags": {
+                "Metrics": "*"
+            },
+            "properties": {
+                "kubernetesVersion": "[parameters('kubernetesVersion')]",
+                "enableRBAC": "[parameters('enableRBAC')]",
+                "dnsPrefix": "[parameters('dnsPrefix')]",
+                "addonProfiles": {
+                    "httpApplicationRouting": {
+                        "enabled": "[parameters('enableHttpApplicationRouting')]"
+                    }
+                },
+                "agentPoolProfiles": [
+                    {
+                        "name": "agentpool",
+                        "osDiskSizeGB": "[parameters('osDiskSizeGB')]",
+                        "count": "[parameters('agentCount')]",
+                        "vmSize": "[parameters('agentVMSize')]",
+                        "osType": "[parameters('osType')]",
+                        "storageProfile": "ManagedDisks",
+                        "vnetSubnetID": "[variables('vnetSubnetID')]",
+                        "maxPods": "[parameters('maxPods')]"
+                    }
+                ],
+                "servicePrincipalProfile": {
+                    "clientId": "[parameters('existingServicePrincipalClientId')]",
+                    "secret": "[parameters('existingServicePrincipalClientSecret')]"
+                },
+                "networkProfile": {
+                    "networkPlugin": "[parameters('networkPlugin')]",
+                    "podCidr": "[parameters('podCidr')]",
+                    "serviceCidr": "[parameters('serviceCidr')]",
+                    "dnsServiceIP": "[parameters('dnsServiceIP')]",
+                    "dockerBridgeCidr": "[parameters('dockerBridgeCidr')]"
+                }
+            },
+            "resources": [
+                {
+                    "condition": "[equals(parameters('diagnosticsEnabled'), 'yes')]",
+                  "type": "providers/diagnosticSettings",
+                  "name": "[concat('Microsoft.Insights/', parameters('diagnosticsSettingName'))]",
+                  "dependsOn": [
+                    "[resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName'))]"
+                  ],
+                  "apiVersion": "2017-05-01-preview",
+                  "properties": {
+                    "name": "[parameters('diagnosticsSettingName')]",
+                    "eventHubAuthorizationRuleId": "[resourceId(parameters('diagnosticsEventHubResourceGroup'),'Microsoft.EventHub/namespaces/authorizationRules', parameters('diagnosticsEventHubNamespace'), parameters('diagnosticsEventHubAuthorizationRule'))]",
+                    "logs": [
+                      {
+                        "category": "kube-apiserver",
+                        "enabled": true,
+                        "retentionPolicy": {
+                          "days": 0,
+                          "enabled": false
+                        }
+                      },
+                      {
+                        "category": "kube-controller-manager",
+                        "enabled": true,
+                        "retentionPolicy": {
+                          "days": 0,
+                          "enabled": false
+                        }
+                      },
+                      {
+                        "category": "kube-scheduler",
+                        "enabled": true,
+                        "retentionPolicy": {
+                          "days": 0,
+                          "enabled": false
+                        }
+                      },
+                      {
+                        "category": "kube-audit",
+                        "enabled": true,
+                        "retentionPolicy": {
+                          "days": 0,
+                          "enabled": false
+                        }
+                      },
+                      {
+                        "category": "cluster-autoscaler",
+                        "enabled": true,
+                        "retentionPolicy": {
+                          "days": 0,
+                          "enabled": false
+                        }
+                      }
+                    ],
+                    "metrics": [
+                      {
+                        "timeGrain": "PT1M",
+                        "enabled": true,
+                        "retentionPolicy": {
+                          "enabled": false,
+                          "days": 0
+                        }
+                      }
+                    ]
+                  }
+                }        
+            ]
+        }
+    ]
+}
