@@ -1,14 +1,18 @@
 name: aks-test
 shortName: akstest
-version: 0.0.1
+version: 1.0.0
 ingredients:
-  - "@azbake/ingredient-azure-kubernetes-service@0~"
+  - "@azbake/ingredient-azure-kubernetes-service@~0"
 resourceGroup: true
 rgOverride: test
 parallelRegions: false
 recipe:
-  aks-test:
+  k8-test:
     properties:
       type: "@azbake/ingredient-azure-kubernetes-service"
       parameters:
-        name: "akstest"
+        aksName: testvm
+        dnsPrefix: test
+        osDiskSizeGB: 10
+        existingServicePrincipalClientId: 100
+        existingServicePrincipalClientSecret: 101

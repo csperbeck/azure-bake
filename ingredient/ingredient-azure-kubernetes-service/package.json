@@ -1,33 +1,33 @@
 {
-		"name": "@azbake/ingredient-azure-kubernetes-service",
-		"description": "This ingredient will stand up an instance of the Azure Kubernetes Service (AKS/ACS)",
-    "version": "0.0.1",
-    "main": "dist/index.js",
-		"typings": "src/index.ts",
-		"author": "HCHB",
-		"license": "MIT",
-		"scripts": {
-				"upload": "tsc -p . && npm --no-git-tag-version version patch && npm publish --access public",
-				"compile": "tsc -p .",
-				"watch": "tsc -w -p ."
-		},
-		"directories": {
-				"lib": "dist"
-		},
-		"peerDependencies": {
-				"@azbake/core": "0.*",
-				"@azure/ms-rest-nodeauth": "0.9.2"
-		},
-		"devDependencies": {
-				"@azbake/core": "0.*",
-				"@azure/ms-rest-nodeauth": "^0.9.2",
-				"@types/node": "^10.14.14"
-		},
-		"dependencies": {
-				"@azbake/arm-helper": "^0.1.68",
-				"@azure/arm-containerservice": "^8.0.0"
-		},
-		"publishConfig": {
-				"access": "public"
-		}
+	"name": "@azbake/ingredient-azure-kubernetes-service",
+	"description": "This ingredient will stand up an instance of the Azure Kubernetes Service (AKS/ACS)",
+	"version": "0.0.1",
+	"main": "dist/index.js",
+	"typings": "src/index.ts",
+	"author": "HCHB",
+	"license": "MIT",
+	"scripts": {
+		"upload": "tsc -p . && npm --no-git-tag-version version patch && npm publish --access public",
+		"compile": "tsc -p .",
+		"watch": "tsc -w -p ."
+	},
+	"directories": {
+		"lib": "dist"
+	},
+	"peerDependencies": {
+		"@azbake/core": "0.*",
+		"@azure/ms-rest-nodeauth": "0.9.2"
+	},
+	"devDependencies": {
+		"@azbake/core": "0.*",
+		"@azure/ms-rest-nodeauth": "^0.9.2",
+		"@types/node": "^10.14.14"
+	},
+	"dependencies": {
+		"@azbake/arm-helper": "^0.1.68",
+		"@azure/arm-containerservice": "^8.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
